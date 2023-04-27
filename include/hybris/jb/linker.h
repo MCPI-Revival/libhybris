@@ -212,9 +212,8 @@ void call_constructors_recursive(soinfo *si);
 
 #ifdef ANDROID_ARM_LINKER 
 typedef long unsigned int *_Unwind_Ptr;
-_Unwind_Ptr dl_unwind_find_exidx(_Unwind_Ptr pc, int *pcount);
-#elif defined(ANDROID_X86_LINKER)
-int dl_iterate_phdr(int (*cb)(struct dl_phdr_info *, size_t, void *), void *);
+_Unwind_Ptr android_dl_unwind_find_exidx(_Unwind_Ptr pc, int *pcount);
 #endif
+int android_dl_iterate_phdr(int (*cb)(struct dl_phdr_info *info, size_t size, void *data), void *data);
 
 #endif

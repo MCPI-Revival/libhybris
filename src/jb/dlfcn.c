@@ -179,8 +179,6 @@ int android_dlclose(void *handle)
     return 0;
 }
 
-int android_dl_iterate_phdr(int (*cb)(struct dl_phdr_info *info, size_t size, void *data),void *data);
-
 static int android_get_application_target_sdk_version() {
     return 0;
 }
