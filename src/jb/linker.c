@@ -1116,7 +1116,7 @@ load_library(const char *name)
     Elf32_Ehdr *hdr;
 
     if(fd == -1) {
-        DL_ERR("Library '%s' not found", name);
+        //DL_ERR("Library '%s' not found", name);
         return NULL;
     }
 
@@ -1424,7 +1424,7 @@ static int reloc_library(soinfo *si, Elf32_Rel *rel, unsigned count)
                 default:
                     DL_ERR("%5d unknown weak reloc type %d @ %p (%d)\n",
                                  pid, type, rel, (int) (rel - start));
-                    //return -1;
+                    return -1;
                 }
             } else {
                 /* We got a definition.  */
