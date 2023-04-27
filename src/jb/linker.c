@@ -1976,8 +1976,10 @@ static int link_image(soinfo *si, unsigned wr_offset)
                later on when we resolve relocations, trying to look up a symbol
                with dlsym().
             */
-            d[1] = (unsigned)lsi;
-            lsi->refcount++;
+            if(lsi != 0) {
+                d[1] = (unsigned)lsi;
+                lsi->refcount++;
+            }
         }
     }
 
