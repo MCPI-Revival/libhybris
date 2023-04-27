@@ -470,8 +470,8 @@ _do_lookup(soinfo *si, const char *name, unsigned *base)
         if(d[0] == DT_NEEDED){
             lsi = (soinfo *)d[1];
             if (!validate_soinfo(lsi)) {
-                DL_ERR("%5d bad DT_NEEDED pointer in %s",
-                       pid, si->name);
+                /*DL_ERR("%5d bad DT_NEEDED pointer in %s",
+                       pid, si->name);*/
                 return NULL;
             }
 
@@ -1424,7 +1424,7 @@ static int reloc_library(soinfo *si, Elf32_Rel *rel, unsigned count)
                 default:
                     DL_ERR("%5d unknown weak reloc type %d @ %p (%d)\n",
                                  pid, type, rel, (int) (rel - start));
-                    return -1;
+                    //return -1;
                 }
             } else {
                 /* We got a definition.  */
@@ -1631,8 +1631,8 @@ void call_constructors_recursive(soinfo *si)
             if(d[0] == DT_NEEDED){
                 soinfo* lsi = (soinfo *)d[1];
                 if (!validate_soinfo(lsi)) {
-                    DL_ERR("%5d bad DT_NEEDED pointer in %s",
-                           pid, si->name);
+                    /*DL_ERR("%5d bad DT_NEEDED pointer in %s",
+                           pid, si->name);*/
                 } else {
                     call_constructors_recursive(lsi);
                 }
@@ -1963,12 +1963,13 @@ static int link_image(soinfo *si, unsigned wr_offset)
         if(d[0] == DT_NEEDED){
             DEBUG("%5d %s needs %s\n", pid, si->name, si->strtab + d[1]);
             soinfo *lsi = find_library(si->strtab + d[1]);
-            /*if(lsi == 0) {
-                strlcpy(tmp_err_buf, linker_get_error(), sizeof(tmp_err_buf));
+            if(lsi == 0) {
+                /*strlcpy(tmp_err_buf, linker_get_error(), sizeof(tmp_err_buf));
                 DL_ERR("%5d could not load needed library '%s' for '%s' (%s)",
                        pid, si->strtab + d[1], si->name, tmp_err_buf);
-                goto fail;
-            }*/
+                goto fail;*/
+                continue;
+            }
             /* Save the soinfo of the loaded DT_NEEDED library in the payload
                of the DT_NEEDED entry itself, so that we can retrieve the
                soinfo directly later from the dynamic segment.  This is a hack,
@@ -1976,10 +1977,8 @@ static int link_image(soinfo *si, unsigned wr_offset)
                later on when we resolve relocations, trying to look up a symbol
                with dlsym().
             */
-            if(lsi != 0) {
-                d[1] = (unsigned)lsi;
-                lsi->refcount++;
-            }
+            d[1] = (unsigned)lsi;
+            lsi->refcount++;
         }
     }
 

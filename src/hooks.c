@@ -83,6 +83,7 @@
 #include "../include/hybris/hook.h"
 #include "../include/hybris/properties.h"
 #include "ctype.h"
+#include "../include/hybris/jb/linker.h"
 
 static locale_t hybris_locale;
 static int locale_inited = 0;
@@ -528,6 +529,10 @@ struct _hook main_hooks[] = {
     {"dlsym", my_android_dlsym},
     {"dladdr", android_dladdr},
     {"dlclose", android_dlclose},
+    {"dl_iterate_phdr", android_dl_iterate_phdr},
+#ifdef ANDROID_ARM_LINKER
+    {"dl_unwind_find_exidx", android_dl_unwind_find_exidx},
+#endif
     {"__get_tls_hooks", __get_tls_hooks},
     {"sscanf", sscanf},
     {"scanf", scanf},
